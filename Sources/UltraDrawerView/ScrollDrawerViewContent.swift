@@ -25,7 +25,7 @@ open class ScrollDrawerViewContent: DrawerViewContent {
 
     // MARK: - DrawerViewContent
     
-    public var view: UIView {
+    public var view: UIView! {
         return impl.view
     }
     
@@ -38,11 +38,11 @@ open class ScrollDrawerViewContent: DrawerViewContent {
         }
     }
     
-    public var contentSize: CGSize {
+    open var contentSize: CGSize {
         return impl.contentSize
     }
     
-    public var contentInset: UIEdgeInsets {
+    open var contentInset: UIEdgeInsets {
         return impl.contentInset
     }
     
@@ -114,7 +114,7 @@ private class ScrollDrawerViewContentImpl: NSObject {
 
 extension ScrollDrawerViewContentImpl: DrawerViewContent {
 
-    var view: UIView {
+    var view: UIView! {
         return scrollView
     }
     

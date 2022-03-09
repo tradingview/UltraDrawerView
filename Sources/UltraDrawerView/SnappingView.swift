@@ -293,7 +293,7 @@ open class SnappingView: UIView {
         animation.toValue = newOriginY
         animation.fromValue = origin
         animation.springBounciness = 2
-        animation.completionBlock = { [weak self, source] animation, finished in
+        animation.completionBlock = { [weak self, source] _, finished in
             self?.notifyDidEndUpdatingOrigin(with: source)
             completion?(finished)
         }

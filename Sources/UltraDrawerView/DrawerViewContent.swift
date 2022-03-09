@@ -2,7 +2,7 @@ import UIKit
 
 public protocol DrawerViewContent: AnyObject {
     /// View should be immutable
-    var view: UIView { get }
+    var view: UIView! { get }
     var contentOffset: CGPoint { get set }
     var contentSize: CGSize { get }
     var contentInset: UIEdgeInsets { get }
