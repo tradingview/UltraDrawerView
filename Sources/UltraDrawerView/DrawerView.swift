@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol DrawerViewListener: class {
+public protocol DrawerViewListener: AnyObject {
     func drawerView(_ drawerView: DrawerView, willBeginUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func drawerView(_ drawerView: DrawerView, didUpdateOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func drawerView(_ drawerView: DrawerView, didEndUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)

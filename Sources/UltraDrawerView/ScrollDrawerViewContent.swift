@@ -1,4 +1,5 @@
 import UIKit
+import UltraDrawerViewObjCUtils
 
 /// It is compatible with any type of UIScrollView and UIScrollViewDelegate:
 /// (e.g. UITableViewDelegate, UICollectionViewDelegateFlowLayout and any other custom type).
