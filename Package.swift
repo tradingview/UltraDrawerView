@@ -10,12 +10,13 @@ let package = Package(
     products: [
         .library(
             name: "UltraDrawerView",
-            targets: ["UltraDrawerView"]),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/vmzhivetyev/pop-spm-package.git", from: "1.0.3")
+            targets: ["UltraDrawerView", "pop"]),
     ],
     targets: [
+        .binaryTarget(
+            name: "pop",
+            path: "pop.xcframework"
+        ),
         .target(
             name: "UltraDrawerViewObjCUtils",
             dependencies: [],
@@ -27,7 +28,7 @@ let package = Package(
             name: "UltraDrawerView",
             dependencies: [
                 "UltraDrawerViewObjCUtils",
-                .product(name: "pop", package: "pop-spm-package")
+                "pop"
             ]
         ),
         .testTarget(
