@@ -1,8 +1,8 @@
 import UIKit
 
-public protocol DrawerViewContent: class {
+public protocol DrawerViewContent: AnyObject {
     /// View should be immutable
-    var view: UIView { get }
+    var view: UIView! { get }
     var contentOffset: CGPoint { get set }
     var contentSize: CGSize { get }
     var contentInset: UIEdgeInsets { get }
@@ -10,7 +10,7 @@ public protocol DrawerViewContent: class {
     func removeListener(_ listener: DrawerViewContentListener)
 }
 
-public protocol DrawerViewContentListener: class {
+public protocol DrawerViewContentListener: AnyObject {
     func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentSize contentSize: CGSize)
     
     func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentInset contentInset: UIEdgeInsets)

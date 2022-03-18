@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol DrawerViewListener: class {
+public protocol DrawerViewListener: AnyObject {
     func drawerView(_ drawerView: DrawerView, willBeginUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func drawerView(_ drawerView: DrawerView, didUpdateOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func drawerView(_ drawerView: DrawerView, didEndUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)
@@ -178,6 +178,14 @@ open class DrawerView: UIView {
     
     open func removeListener(_ listener: DrawerViewListener) {
         notifier.unsubscribe(listener)
+    }
+    
+    open func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentSize contentSize: CGSize) {
+        setNeedsLayout()
+    }
+    
+    open func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentInset contentInset: UIEdgeInsets) {
+        setNeedsLayout()
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -367,9 +375,9 @@ open class DrawerView: UIView {
     }
     
     private func state(forOrigin origin: CGFloat) -> State? {
-        let eps: CGFloat = 1e-2
-        let anchors = availableAnchors.sorted { $0.anchor < $1.anchor }
-        return anchors.first(where: { $0.anchor.distance(to: origin) < eps })?.state
+        return availableAnchors
+            .min { abs($0.anchor - origin) < abs($1.anchor - origin) }?
+            .state
     }
     
     private var currentPositionDependencies: PositionDependencies {
@@ -421,11 +429,16 @@ extension DrawerView: SnappingViewListener {
     public func snappingView(_ snappingView: SnappingView, didEndUpdatingOrigin origin: CGFloat,
         source: DrawerOriginChangeSource)
     {
-        if let newState = state(forOrigin: origin), source == .contentInteraction || source == .headerInteraction {
-            state_ = newState
-        }
+        defer { animationSession_ = nil }
         
-        animationSession_ = nil
+        if source == .contentInteraction || source == .headerInteraction {
+            if let newState = state(forOrigin: origin) {
+                state_ = newState
+            } else if let currentState = state {
+                setState(currentState, animated: true, completion: nil)
+                return
+            }
+        }
         
         notifier.forEach { $0.drawerView(self, didEndUpdatingOrigin: origin, source: source) }
     }
@@ -434,14 +447,6 @@ extension DrawerView: SnappingViewListener {
 
 
 extension DrawerView: DrawerViewContentListener {
-    
-    public func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentSize contentSize: CGSize) {
-        setNeedsLayout()
-    }
-    
-    public func drawerViewContent(_ drawerViewContent: DrawerViewContent, didChangeContentInset contentInset: UIEdgeInsets) {
-        setNeedsLayout()
-    }
     
     public func drawerViewContentDidScroll(_ drawerViewContent: DrawerViewContent) {
     }

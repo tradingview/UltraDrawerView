@@ -3,12 +3,12 @@ import pop
 
 
 /// SnappingViewAnimation allows to control targetOrigin during animation
-public protocol SnappingViewAnimation: class {
+public protocol SnappingViewAnimation: AnyObject {
     var targetOrigin: CGFloat { get set }
     var isDone: Bool { get }
 }
 
-public protocol SnappingViewListener: class {
+public protocol SnappingViewListener: AnyObject {
     func snappingView(_ snappingView: SnappingView, willBeginUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func snappingView(_ snappingView: SnappingView, didUpdateOrigin origin: CGFloat, source: DrawerOriginChangeSource)
     func snappingView(_ snappingView: SnappingView, didEndUpdatingOrigin origin: CGFloat, source: DrawerOriginChangeSource)
@@ -293,7 +293,7 @@ open class SnappingView: UIView {
         animation.toValue = newOriginY
         animation.fromValue = origin
         animation.springBounciness = 2
-        animation.completionBlock = { [weak self, source] animation, finished in
+        animation.completionBlock = { [weak self, source] _, finished in
             self?.notifyDidEndUpdatingOrigin(with: source)
             completion?(finished)
         }
